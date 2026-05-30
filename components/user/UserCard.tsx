@@ -21,7 +21,7 @@ export default function UserCard({
       <div className="flex items-start gap-4 sm:gap-6">
         <Image
           src={avatar}
-          alt=""
+          alt={`${username}'s Avatar`}
           width={500}
           height={500}
           className="size-9 sm:size-12 rounded-full"

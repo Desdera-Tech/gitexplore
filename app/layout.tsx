@@ -83,7 +83,7 @@ export default function RootLayout({
       >
         <body className="min-h-full flex flex-col">
           <Navbar />
-          <main className="flex justify-center py-12 px-10">
+          <main className="flex justify-center py-12 px-6 sm:px-10">
             <div className="flex-1 max-w-7xl">{children}</div>
           </main>
           <Footer />
