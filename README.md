@@ -94,6 +94,7 @@ npm run dev
 
 Create a `.env.local` file in the root directory.
 
+NEXT_PUBLIC_GITHUB_URL=https://github.com
 NEXT_PUBLIC_GITHUB_API_URL=https://api.github.com
 NEXT_PUBLIC_APP_NAME=GitExplore
 NEXT_PUBLIC_BASE_URL=http://localhost:3000

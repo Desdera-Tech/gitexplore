@@ -2,6 +2,10 @@ import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import { APP_NAME, BASE_URL } from "@/constants/env";
 import { cn } from "@/lib/utils";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+import QueryProvider from "@/components/layout/QueryProvider";
+import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
@@ -75,20 +79,24 @@ export default function RootLayout({
         inter.variable,
       )}
     >
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <body className="min-h-full flex flex-col">
-          <Navbar />
-          <main className="flex justify-center py-12 px-6 sm:px-10">
-            <div className="flex-1 max-w-7xl">{children}</div>
-          </main>
-          <Footer />
-        </body>
-      </ThemeProvider>
+      <QueryProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <body className="min-h-full flex flex-col">
+            <Navbar />
+            <main className="flex justify-center py-12 px-6 sm:px-10">
+              <div className="flex-1 max-w-7xl">{children}</div>
+            </main>
+            <Footer />
+            <Toaster />
+          </body>
+        </ThemeProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryProvider>
     </html>
   );
 }

@@ -2,7 +2,6 @@
 
 import { useSearchFilter } from "@/hooks/useSearchFilter";
 import { SearchIcon } from "lucide-react";
-import RepositoryCard from "../repo/RepositoryCard";
 import { Input } from "../ui/input";
 import UserCard from "../user/UserCard";
 import FilterPill from "./FilterPill";
@@ -72,7 +71,7 @@ export default function Search() {
             followers={2498}
           />
         ))}
-        {Array.from({ length: 21 }).map((_, i) => (
+        {/* {Array.from({ length: 21 }).map((_, i) => (
           <RepositoryCard
             key={i}
             authorAvatar="https://avatars.githubusercontent.com/u/317747?v=4"
@@ -85,7 +84,7 @@ export default function Search() {
             featuredLanguage="TypeScript"
             lastUpdatedAt="2026-01-30 05:25:09"
           />
-        ))}
+        ))} */}
       </div>
     </div>
   );

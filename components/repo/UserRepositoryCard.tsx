@@ -1,5 +1,6 @@
 import githubColors from "@/lib/colors.json";
 import { cn } from "@/lib/utils";
+import { LanguageName } from "@/types";
 import { formatNumber, formatTimestamp } from "@/utils/format";
 import { IoIosStarOutline } from "react-icons/io";
 
@@ -11,8 +12,6 @@ interface UserRepositoryCardProps {
   featuredLanguage: string;
   lastUpdatedAt: string;
 }
-
-type LanguageName = keyof typeof githubColors;
 
 export default function UserRepositoryCard({
   name,
