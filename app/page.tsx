@@ -1,5 +1,7 @@
+import RepositoryCard from "@/components/repo/RepositoryCard";
 import { Button } from "@/components/ui/button";
 import { ArrowRightIcon, SearchIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -9,22 +11,43 @@ export default function Home() {
           <h1 className="font-semibold text-[32px] text-center">
             Get more insights and stats on GitHub resources
           </h1>
-          <div className="flex items-center bg-card text-muted-foreground rounded-md w-full h-14.5 border-[1.5px] px-4 gap-4 cursor-pointer">
-            <SearchIcon />
-            <p className="pointer-events-none">Search...</p>
-          </div>
+          <Link href="/search">
+            <div className="flex items-center bg-card text-muted-foreground rounded-md w-full h-14.5 border-[1.5px] px-4 gap-4 cursor-pointer">
+              <SearchIcon />
+              <p className="pointer-events-none">Search...</p>
+            </div>
+          </Link>
         </div>
       </div>
-      <div className="flex items-end justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold">Trending Repositories</h2>
           <p className="text-sm text-muted-foreground">
             The projects the community is building today.
           </p>
         </div>
-        <Button variant="link">
-          View all trending <ArrowRightIcon />
-        </Button>
+        <div>
+          <Link href="/repositories">
+            <Button className="px-0" variant="link">
+              View all trending <ArrowRightIcon />
+            </Button>
+          </Link>
+        </div>
+      </div>
+      <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+        {Array.from({ length: 9 }).map((_, i) => (
+          <RepositoryCard
+            key={i}
+            authorAvatar="https://avatars.githubusercontent.com/u/317747?v=4"
+            authorName="facebook"
+            name="react-engine"
+            description="A high-performance rendering engine for large-scale React applications with built-in streaming capabilities with native performance"
+            stars={2409}
+            forks={1890}
+            featuredLanguage="TypeScript"
+            lastUpdatedAt="2026-01-30 05:25:09"
+          />
+        ))}
       </div>
     </div>
   );

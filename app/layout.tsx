@@ -3,6 +3,7 @@ import Navbar from "@/components/layout/Navbar";
 import { APP_NAME, BASE_URL } from "@/constants/env";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 
@@ -74,13 +75,20 @@ export default function RootLayout({
         inter.variable,
       )}
     >
-      <body className="min-h-full flex flex-col">
-        <Navbar />
-        <main className="flex justify-center py-12 px-10">
-          <div className="flex-1 max-w-7xl">{children}</div>
-        </main>
-        <Footer />
-      </body>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <body className="min-h-full flex flex-col">
+          <Navbar />
+          <main className="flex justify-center py-12 px-10">
+            <div className="flex-1 max-w-7xl">{children}</div>
+          </main>
+          <Footer />
+        </body>
+      </ThemeProvider>
     </html>
   );
 }
