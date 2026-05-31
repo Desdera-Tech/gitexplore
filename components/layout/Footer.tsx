@@ -2,7 +2,7 @@ import { APP_NAME, DEVELOPER, DEVELOPER_LINK } from "@/constants/env";
 
 export default function Footer() {
   return (
-    <footer className="flex bg-background justify-center mt-auto py-12 px-10">
+    <footer className="flex bg-background justify-center border-t mt-auto py-12 px-10">
       <div className="flex flex-1 max-w-7xl justify-between gap-4">
         <div className="space-y-2">
           <h3 className="font-bold text-xs">{APP_NAME}</h3>
