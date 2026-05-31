@@ -2,6 +2,8 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@plugin "@tailwindcss/typography";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -168,6 +170,10 @@
 
   --sidebar-border: oklch(100% 0 0 / 8%);
   --sidebar-ring: oklch(85% 0 0);
+}
+
+a {
+  word-break: break-word;
 }
 
 @layer base {

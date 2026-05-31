@@ -25,7 +25,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="relative bg-card border-b px-6 md:px-10 flex justify-center">
+    <nav className="sticky top-0 bg-card border-b px-6 md:px-10 flex justify-center">
       <div className="flex flex-1 items-center justify-between md:justify-start max-w-7xl h-16 gap-8">
         {/* Logo */}
         <a href="/" className="font-bold text-xl text-primary z-50">
