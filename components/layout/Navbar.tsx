@@ -37,7 +37,7 @@ export default function Navbar() {
           {NAVIGATION_LINKS.map((link, index) => {
             const isActive =
               (link.href === pathname && link.href === "/") ||
-              (pathname.includes(link.href) && link.href !== "/") ||
+              (pathname.startsWith(link.href) && link.href !== "/") ||
               link.subpages.includes(pathname);
 
             return (
@@ -105,7 +105,7 @@ export default function Navbar() {
           {NAVIGATION_LINKS.map((link, index) => {
             const isActive =
               (link.href === pathname && link.href === "/") ||
-              (pathname.includes(link.href) && link.href !== "/") ||
+              (pathname.startsWith(link.href) && link.href !== "/") ||
               link.subpages.includes(pathname);
 
             return (
