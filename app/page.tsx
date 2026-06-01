@@ -1,4 +1,4 @@
-import RepositoryCard from "@/components/repo/RepositoryCard";
+import TrendingRepos from "@/components/explore/TrendingRepos";
 import { Button } from "@/components/ui/button";
 import { ArrowRightIcon, SearchIcon } from "lucide-react";
 import Link from "next/link";
@@ -34,21 +34,7 @@ export default function Home() {
           </Link>
         </div>
       </div>
-      <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {Array.from({ length: 9 }).map((_, i) => (
-          <RepositoryCard
-            key={i}
-            authorAvatar="https://avatars.githubusercontent.com/u/317747?v=4"
-            authorName="facebook"
-            name="react-engine"
-            description="A high-performance rendering engine for large-scale React applications with built-in streaming capabilities with native performance"
-            stars={2409}
-            forks={1890}
-            featuredLanguage="TypeScript"
-            lastUpdatedAt="2026-01-30 05:25:09"
-          />
-        ))}
-      </div>
+      <TrendingRepos perPage={6} />
     </div>
   );
 }

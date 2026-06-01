@@ -7,7 +7,7 @@ export function formatNumber(num: number) {
     .toLowerCase();
 }
 
-export function formatTimestamp(dateInput: string) {
+export function formatTimestamp(dateInput: Date | string) {
   const date = new Date(dateInput);
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
@@ -37,4 +37,8 @@ export function formatTimestamp(dateInput: string) {
   }
 
   return date.toLocaleDateString("en-US", options);
+}
+
+export function flattenPaginatedPage<T>(data?: { pages: { items: T[] }[] }) {
+  return data?.pages.flatMap((page) => page.items) ?? [];
 }

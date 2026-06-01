@@ -15,9 +15,9 @@ export default function Navbar() {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
 
-  // Prevent hydration mismatch by waiting for mount
   useEffect(() => {
-    setMounted(true);
+    const timeout = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timeout);
   }, []);
 
   const toggleTheme = () => {
@@ -25,12 +25,12 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 bg-card border-b px-6 md:px-10 flex justify-center">
+    <nav className="sticky top-0 z-10 bg-card border-b px-6 md:px-10 flex justify-center">
       <div className="flex flex-1 items-center justify-between md:justify-start max-w-7xl h-16 gap-8">
         {/* Logo */}
-        <a href="/" className="font-bold text-xl text-primary z-50">
+        <Link href="/" className="font-bold text-xl text-primary z-50">
           {APP_NAME}
-        </a>
+        </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6">
