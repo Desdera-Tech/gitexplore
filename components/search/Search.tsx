@@ -1,13 +1,31 @@
 "use client";
 
+import {
+  useSearchRepositories,
+  useSearchUsers,
+} from "@/hooks/repositories/useSearch";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { useSearchFilter } from "@/hooks/useSearchFilter";
+import { flattenPaginatedPage } from "@/utils/format";
 import { SearchIcon } from "lucide-react";
+import RepositoryCard from "../repo/RepositoryCard";
+import { EmptyState } from "../ui/EmptyState";
+import { ErrorState } from "../ui/ErrorState";
+import InfiniteScrollContainer from "../ui/InfiniteScrollContainer";
 import { Input } from "../ui/input";
+import { Spinner } from "../ui/spinner";
 import UserCard from "../user/UserCard";
 import FilterPill from "./FilterPill";
 
 export default function Search() {
-  const { filters, filterType, setFilterType } = useSearchFilter();
+  const {
+    search,
+    filters,
+    filterType,
+    setFilterType,
+    searchValue,
+    setSearchValue,
+  } = useSearchFilter();
 
   const placeholders = () => {
     switch (filterType) {
@@ -18,7 +36,7 @@ export default function Search() {
         return "Search for users by their username";
 
       default:
-        return "Search for repositories and/or users";
+        return "";
     }
   };
 
@@ -29,63 +47,156 @@ export default function Search() {
           <div className="flex-1 w-full relative">
             <SearchIcon className="absolute size-5 text-muted-foreground left-3 transform top-1/2 -translate-y-1/2" />
             <Input
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
               className="bg-card h-12 pl-10 ring-0!"
               placeholder={placeholders()}
             />
           </div>
-          {filterType === "repositories" && (
-            <div className="flex-1 w-full relative">
-              <SearchIcon className="absolute size-5 text-muted-foreground left-3 transform top-1/2 -translate-y-1/2" />
-              <Input
-                className="bg-card h-12 pl-10 ring-0!"
-                placeholder="Enter repository author"
-              />
-            </div>
-          )}
         </div>
         <div className="flex flex-wrap gap-2">
-          {filters.map((filter) => (
+          {filters.map((filter, i) => (
             <FilterPill
-              label={
-                filter === "all"
-                  ? "All Results"
-                  : `${filter[0].toUpperCase()}${filter.slice(1, filter.length)}`
-              }
+              key={i}
+              label={`${filter[0].toUpperCase()}${filter.slice(1, filter.length)}`}
               selected={filter === filterType}
               onClick={() => setFilterType(filter)}
             />
           ))}
         </div>
       </div>
-      <div className="space-y-4">
-        <p className="font-medium text-xs text-muted-foreground">
-          Showing 4,291 results
-        </p>
-        {Array.from({ length: 5 }).map((_, i) => (
-          <UserCard
-            key={i}
-            avatar="https://avatars.githubusercontent.com/u/317747?v=4"
-            username="leeerob"
-            fullName="Lee Robinson"
-            bio="VP of Product at Vercel. Creator and Educator."
-            followers={2498}
-          />
-        ))}
-        {/* {Array.from({ length: 21 }).map((_, i) => (
-          <RepositoryCard
-            key={i}
-            authorAvatar="https://avatars.githubusercontent.com/u/317747?v=4"
-            authorName="facebook"
-            name="react-engine"
-            description="A high-performance rendering engine for large-scale React applications with built-in streaming capabilities with native performance"
-            descriptionClass="line-clamp-4"
-            stars={2409}
-            forks={1890}
-            featuredLanguage="TypeScript"
-            lastUpdatedAt="2026-01-30 05:25:09"
-          />
-        ))} */}
-      </div>
+      {filterType === "repositories" && <Repositories search={search} />}
+      {filterType === "users" && <Users search={search} />}
     </div>
+  );
+}
+
+function Repositories({ search }: { search: string }) {
+  const {
+    data,
+    isPending,
+    isEnabled,
+    isError,
+    refetch,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useSearchRepositories(search ? `${search} in:name` : "");
+
+  const loadMoreRef = useInfiniteScroll(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, !!hasNextPage);
+
+  const repositories = flattenPaginatedPage(data);
+
+  const pending = isPending && isEnabled;
+
+  if (pending) {
+    return <Spinner className="mx-auto my-10" />;
+  }
+
+  if (isError) {
+    return (
+      <ErrorState
+        title="Failed to search repositories"
+        message="An error occurred while trying to search for repositories"
+        onRetry={() => refetch()}
+      />
+    );
+  }
+
+  if (repositories.length == 0) {
+    if (search) {
+      return (
+        <EmptyState
+          title="No repositories found"
+          message="No items match your current search."
+        />
+      );
+    } else {
+      return (
+        <EmptyState
+          title="Start a search"
+          message="Enter a repository name and/or author to view results"
+        />
+      );
+    }
+  }
+
+  return (
+    <InfiniteScrollContainer
+      loadMoreRef={loadMoreRef}
+      isFetchingNextPage={isFetchingNextPage}
+      className="flex flex-col gap-4"
+    >
+      {repositories.map((repo) => (
+        <RepositoryCard key={repo.id} repository={repo} />
+      ))}
+    </InfiniteScrollContainer>
+  );
+}
+
+function Users({ search }: { search: string }) {
+  const {
+    data,
+    isPending,
+    isEnabled,
+    isError,
+    refetch,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useSearchUsers(search);
+
+  const loadMoreRef = useInfiniteScroll(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, !!hasNextPage);
+
+  const users = flattenPaginatedPage(data);
+
+  const pending = isPending && isEnabled;
+
+  if (pending) {
+    return <Spinner className="mx-auto my-10" />;
+  }
+
+  if (isError) {
+    return (
+      <ErrorState title="Failed to search users" onRetry={() => refetch()} />
+    );
+  }
+
+  if (users.length == 0) {
+    if (search) {
+      return (
+        <EmptyState
+          title="No users found"
+          message="No items match your current search."
+        />
+      );
+    } else {
+      return (
+        <EmptyState
+          title="Start a search"
+          message="Enter a name to search for profiles"
+        />
+      );
+    }
+  }
+
+  return (
+    <InfiniteScrollContainer
+      loadMoreRef={loadMoreRef}
+      isFetchingNextPage={isFetchingNextPage}
+      className="flex flex-col gap-4"
+    >
+      {users.map((user) => (
+        <UserCard key={user.username} user={user} />
+      ))}
+    </InfiniteScrollContainer>
   );
 }

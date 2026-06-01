@@ -70,7 +70,10 @@ export interface GithubUser {
 
 export interface GithubSearchUser {
   login: string;
-  id: number;
-  avatar_url: string;
-  html_url: string;
+  avatarUrl: string;
+  name: string | null;
+  bio: string | null;
+  followers: {
+    totalCount: number;
+  };
 }

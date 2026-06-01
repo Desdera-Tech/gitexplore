@@ -24,7 +24,7 @@ export default function RepositoryCard({
     language,
     stars,
     forks,
-    updatedAt,
+    createdAt,
   } = repository;
 
   const langKey = language as LanguageName;
@@ -75,7 +75,7 @@ export default function RepositoryCard({
             </div>
           </div>
           <p className="font-medium text-xs text-muted-foreground">
-            {formatTimestamp(updatedAt)}
+            {formatTimestamp(createdAt)}
           </p>
         </div>
       </div>

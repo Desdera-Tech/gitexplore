@@ -49,12 +49,6 @@ export async function searchRepositories({
   return { total: data.total_count, items: mapGithubRepositories(data.items) };
 }
 
-export function flattenRepositories(data?: {
-  pages: { items: Repository[] }[];
-}) {
-  return data?.pages.flatMap((page) => page.items) ?? [];
-}
-
 export async function getRepository(
   owner: string,
   repo: string,

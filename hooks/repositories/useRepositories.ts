@@ -15,20 +15,23 @@ import {
 } from "@/services/repositories";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
-function buildQuery(feed: RepositoryFeed): { q: string; sort: RepositorySort } {
+function buildQuery(
+  feed: RepositoryFeed,
+  q?: string,
+): { q: string; sort: RepositorySort } {
   const last7 = getDateDaysAgo(7);
   const last30 = getDateDaysAgo(30);
 
   switch (feed) {
     case "top":
       return {
-        q: ``,
+        q: q || "",
         sort: "stars",
       };
 
     case "desc":
       return {
-        q: ``,
+        q: q || "",
         sort: "created",
       };
 
@@ -85,16 +88,24 @@ export function useInfiniteRepositories(feed: RepositoryFeed, perPage = 18) {
   });
 }
 
-export function useInfiniteUserRepositories(
-  owner: string,
-  feed: RepositoryFeed,
+export function useInfiniteUserRepositories({
+  q,
+  owner,
+  feed,
   perPage = 18,
-) {
+  enabled = true,
+}: {
+  q?: string;
+  owner: string;
+  feed: RepositoryFeed;
+  perPage: number;
+  enabled: boolean;
+}) {
   return useInfiniteQuery({
-    queryKey: ["user-repositories", owner, feed, "infinite", perPage],
+    queryKey: ["user-repositories", owner, feed, "infinite", perPage, q],
 
     queryFn: async ({ pageParam = 1 }) => {
-      const query = buildQuery(feed);
+      const query = buildQuery(feed, q);
 
       const result = await searchRepositories({
         ...query,
@@ -116,7 +127,7 @@ export function useInfiniteUserRepositories(
 
       return allPages.length + 1;
     },
-
+    enabled,
     staleTime: 1000 * 60 * 10,
     gcTime: 1000 * 60 * 30,
   });

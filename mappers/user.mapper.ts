@@ -1,4 +1,4 @@
-import { GithubUser } from "@/models/github";
+import { GithubSearchUser, GithubUser } from "@/models/github";
 import { User } from "@/models/user";
 
 export function mapGithubUser(user: GithubUser): User {
@@ -15,4 +15,24 @@ export function mapGithubUser(user: GithubUser): User {
     createdAt: user.created_at,
     updatedAt: user.updated_at,
   };
+}
+
+export function mapGithubSearchUser(user: GithubSearchUser): User {
+  return {
+    id: "",
+    name: user.name,
+    username: user.login,
+    bio: user.bio,
+    avatarUrl: user.avatarUrl,
+    githubUrl: "",
+    followers: user.followers.totalCount,
+    following: 0,
+    publicRepos: 0,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+}
+
+export function mapGithubSearchUsers(users: GithubSearchUser[]): User[] {
+  return users.filter((user) => user && user.login).map(mapGithubSearchUser);
 }

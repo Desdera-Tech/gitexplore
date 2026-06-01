@@ -1,9 +1,10 @@
 "use client";
 
 import { useInfiniteUserRepositories } from "@/hooks/repositories/useRepositories";
+import { useUser } from "@/hooks/repositories/useUsers";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { RepositoryFeed } from "@/models/repository";
-import { flattenRepositories } from "@/services/repositories";
+import { flattenPaginatedPage } from "@/utils/format";
 import UserRepositoryCard from "../repo/UserRepositoryCard";
 import { EmptyState } from "../ui/EmptyState";
 import { ErrorState } from "../ui/ErrorState";
@@ -11,35 +12,49 @@ import InfiniteScrollContainer from "../ui/InfiniteScrollContainer";
 import { Spinner } from "../ui/spinner";
 
 export default function UserRepos({
+  query,
   username,
   perPage = 18,
-  shouldLoadMore,
   feed,
+  shouldLoadMore,
 }: {
+  query?: string;
   username: string;
   perPage?: number;
-  shouldLoadMore?: boolean;
   feed: RepositoryFeed;
+  shouldLoadMore?: boolean;
 }) {
+  const { data: user, isPending: isUserPending } = useUser(username);
+  const repos = user?.publicRepos || 0;
+
   const {
     data,
     isPending,
+    isEnabled,
     error,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
     refetch,
-  } = useInfiniteUserRepositories(username, feed, perPage);
+  } = useInfiniteUserRepositories({
+    q: query,
+    owner: username,
+    feed,
+    perPage,
+    enabled: repos > 0,
+  });
 
   const loadMoreRef = useInfiniteScroll(() => {
     if (shouldLoadMore && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   }, !!hasNextPage);
+  const pending = (isPending && isEnabled) || isUserPending;
 
-  const repositories = flattenRepositories(data);
+  const repositories = flattenPaginatedPage(data);
 
-  if (isPending) return <Spinner className="mx-auto" />;
+  if (pending) return <Spinner className="mx-auto" />;
+
   if (error)
     return (
       <ErrorState
@@ -49,14 +64,23 @@ export default function UserRepos({
     );
 
   if (!repositories.length) {
-    return (
-      <EmptyState
-        title="No repositories found"
-        message="Please check back at a different time."
-        actionLabel="Refresh"
-        onAction={() => refetch()}
-      />
-    );
+    if (query) {
+      return (
+        <EmptyState
+          title="No repositories found"
+          message="No items match your current search."
+        />
+      );
+    } else {
+      return (
+        <EmptyState
+          title="No repositories found"
+          message="Please check back at a different time."
+          actionLabel="Refresh"
+          onAction={repos > 0 ? () => refetch() : undefined}
+        />
+      );
+    }
   }
 
   return (

@@ -2,7 +2,7 @@
 
 import { useInfiniteRepositories } from "@/hooks/repositories/useRepositories";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
-import { flattenRepositories } from "@/services/repositories";
+import { flattenPaginatedPage } from "@/utils/format";
 import RepositoryCard from "../repo/RepositoryCard";
 import { EmptyState } from "../ui/EmptyState";
 import { ErrorState } from "../ui/ErrorState";
@@ -32,7 +32,7 @@ export default function TrendingRepos({
     }
   }, !!hasNextPage);
 
-  const repositories = flattenRepositories(data);
+  const repositories = flattenPaginatedPage(data);
 
   if (isLoading) return <Spinner className="mx-auto" />;
   if (error)

@@ -38,3 +38,7 @@ export function formatTimestamp(dateInput: Date | string) {
 
   return date.toLocaleDateString("en-US", options);
 }
+
+export function flattenPaginatedPage<T>(data?: { pages: { items: T[] }[] }) {
+  return data?.pages.flatMap((page) => page.items) ?? [];
+}

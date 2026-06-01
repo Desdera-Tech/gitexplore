@@ -1,4 +1,4 @@
-import { GITHUB_API_TOKEN, GITHUB_API_URL, GITHUB_URL } from "@/constants/env";
+import { GITHUB_API_TOKEN, GITHUB_API_URL } from "@/constants/env";
 import axios, { AxiosError } from "axios";
 
 export class ApiError extends Error {
@@ -54,7 +54,7 @@ export const api = axios.create({
 });
 
 export const githubGraphql = axios.create({
-  baseURL: `${GITHUB_URL}/graphql`,
+  baseURL: `${GITHUB_API_URL}/graphql`,
   headers: {
     Authorization: `Bearer ${GITHUB_API_TOKEN}`,
     "Content-Type": "application/json",

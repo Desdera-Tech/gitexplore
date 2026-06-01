@@ -1,4 +1,4 @@
-import UserRepos from "@/components/user/UserRepos";
+import AllUserRepos from "@/components/user/AllUserRepos";
 import Link from "next/link";
 
 export default async function ProfileRepositories({
@@ -18,7 +18,7 @@ export default async function ProfileRepositories({
           Repositories
         </h2>
       </div>
-      <UserRepos username={username} feed="desc" shouldLoadMore />
+      <AllUserRepos username={username} />
     </div>
   );
 }
