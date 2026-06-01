@@ -51,6 +51,7 @@ export default function Search() {
               onChange={(e) => setSearchValue(e.target.value)}
               className="bg-card h-12 pl-10 ring-0!"
               placeholder={placeholders()}
+              autoFocus
             />
           </div>
         </div>

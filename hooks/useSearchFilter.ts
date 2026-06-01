@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
 
-const filters = ["repositories", "users"] as const;
+const filters = ["users", "repositories"] as const;
 
 type FilterType = (typeof filters)[number];
 
 export function useSearchFilter() {
-  const [filterType, setFilterType] = useState<FilterType>("repositories");
+  const [filterType, setFilterType] = useState<FilterType>("users");
 
   const [searchValue, setSearchValue] = useState("");
   const [search] = useDebounceValue(searchValue, 300);
