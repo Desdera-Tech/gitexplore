@@ -1,3 +1,18 @@
+export type RepositoryFeed =
+  | "top"
+  | "desc"
+  | "trending"
+  | "mostStarred"
+  | "recentCreated"
+  | "recentUpdated";
+
+export type RepositorySort =
+  | "stars"
+  | "forks"
+  | "help-wanted-issues"
+  | "created"
+  | "updated";
+
 export interface RepositoryOwner {
   username: string;
   avatarUrl: string;

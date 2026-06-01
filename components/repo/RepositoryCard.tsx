@@ -32,7 +32,7 @@ export default function RepositoryCard({
 
   return (
     <Link href={`/profiles/${username}/repositories/${name}`}>
-      <div className="bg-card p-6 border hover:border-primary transition-all rounded-md">
+      <div className="bg-card h-full p-6 border hover:border-primary transition-all rounded-md">
         <div className="space-y-2">
           <div className="flex items-center gap-3">
             <Image

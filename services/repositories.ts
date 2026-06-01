@@ -14,15 +14,9 @@ import {
   Repository,
   RepositoryLanguages,
   RepositorySearchResponse,
+  RepositorySort,
   RepositoryStatsResponse,
 } from "@/models/repository";
-
-export type RepositorySort =
-  | "stars"
-  | "forks"
-  | "help-wanted-issues"
-  | "created"
-  | "updated";
 
 interface SearchRepositoriesParams {
   q: string;

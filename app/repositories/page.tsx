@@ -13,7 +13,7 @@ export default function Repositories() {
           </p>
         </div>
       </div>
-      <TrendingRepos shouldLoadMore={true} />
+      <TrendingRepos shouldLoadMore />
     </div>
   );
 }
