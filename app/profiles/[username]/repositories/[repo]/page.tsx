@@ -77,14 +77,19 @@ export default async function RepositoryPage({
   return (
     <div className="space-y-8">
       <RepositoryHeader repository={repository} />
-      <div className="flex flex-col md:flex-row gap-8">
-        <div className="flex-2 space-y-4 overflow-hidden">
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+        <div className="order-1 md:col-span-2 md:row-start-1">
           <RepositoryStats repository={repository} commit={commit} />
-          <Readme owner={username} repo={repo} />
         </div>
-        <div className="flex-1 space-y-4">
+
+        <div className="space-y-4 order-2 md:col-span-1 md:row-start-1 md:row-span-2">
           <RepositoryAbout repository={repository} />
           <RepositoryLanguages repository={repository} languages={languages} />
+        </div>
+
+        <div className="overflow-hidden order-3 md:col-span-2 md:row-start-2">
+          <Readme owner={username} repo={repo} />
         </div>
       </div>
     </div>

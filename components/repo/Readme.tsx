@@ -41,7 +41,7 @@ export function Readme({ owner, repo }: Props) {
         <MdOutlineArticle className="text-muted-foreground text-xl" />
         <p className="font-semibold text-xl">README.md</p>
       </div>
-      <div className="prose dark:prose-invert max-w-none p-6">
+      <div className="prose dark:prose-invert max-w-full w-full overflow-hidden p-6 [&_p]:overflow-hidden [&_table]:block [&_table]:overflow-x-auto [&_table]:whitespace-nowrap [&_pre]:overflow-x-auto">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeHighlight]}
