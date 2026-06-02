@@ -1,6 +1,11 @@
-"use client";
-
 import TrendingRepos from "@/components/explore/TrendingRepos";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Trending GitHub Repositories",
+  description:
+    "Browse trending GitHub repositories across programming languages and discover popular open-source projects.",
+};
 
 export default function Repositories() {
   return (
