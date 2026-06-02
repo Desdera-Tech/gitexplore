@@ -2,24 +2,44 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import UserInfo from "@/components/user/UserInfo";
 import UserRepos from "@/components/user/UserRepos";
-import { getUser } from "@/services/users";
 import { ArrowRightIcon } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
-import { cache } from "react";
-import { toast } from "sonner";
+import { getCachedUser } from "./actions";
 
-export const getCachedUser = cache(async (username: string) => {
-  try {
-    return await getUser(username);
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "An error occurred";
-    toast.error(message);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}): Promise<Metadata> {
+  const { username } = await params;
 
-    console.error(error);
-    return null;
+  const user = await getCachedUser(username);
+  if (!user) {
+    return {
+      title: "Profile Not Found",
+      description: `The GitHub profile for ${username} was not found.`,
+    };
   }
-});
+
+  return {
+    title: user.name ? `${user.name} (@${user.username})` : `@${user.username}`,
+
+    description:
+      user.bio ||
+      `Explore ${user.username}'s GitHub profile, repositories, followers, and contributions.`,
+
+    openGraph: {
+      title: `${user.username} on GitExplore`,
+      description: user.bio || `GitHub developer profile for ${user.username}.`,
+      images: [
+        {
+          url: user.avatarUrl,
+        },
+      ],
+    },
+  };
+}
 
 export default async function Profile({
   params,

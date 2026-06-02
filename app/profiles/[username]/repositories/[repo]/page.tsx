@@ -4,58 +4,38 @@ import RepositoryHeader from "@/components/repo/RepositoryHeader";
 import RepositoryLanguages from "@/components/repo/RepositoryLanguages";
 import RepositoryStats from "@/components/repo/RepositoryStats";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { Metadata } from "next";
 import {
-  getLatestCommit,
-  getRepository,
-  getRepositoryLanguages,
-} from "@/services/repositories";
-import { cache } from "react";
-import { toast } from "sonner";
+  getCachedRepository,
+  getCachedRepositoryCommit,
+  getCachedRepositoryLanguages,
+} from "../../actions";
 
-export const getCachedRepository = cache(
-  async (owner: string, repo: string) => {
-    try {
-      return await getRepository(owner, repo);
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "An error occurred";
-      toast.error(message);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{
+    username: string;
+    repo: string;
+  }>;
+}): Promise<Metadata> {
+  const { username, repo } = await params;
 
-      console.error(error);
-      return null;
-    }
-  },
-);
+  const repository = await getCachedRepository(username, repo);
 
-export const getCachedRepositoryCommit = cache(
-  async (owner: string, repo: string) => {
-    try {
-      return await getLatestCommit(owner, repo);
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "An error occurred";
-      toast.error(message);
+  if (!repository) {
+    return {
+      title: "Repository Not Found",
+      description: `The GitHub repository ${username}/${repo} was not found.`,
+    };
+  }
 
-      console.error(error);
-      return null;
-    }
-  },
-);
-
-export const getCachedRepositoryLanguages = cache(
-  async (owner: string, repo: string) => {
-    try {
-      return await getRepositoryLanguages(owner, repo);
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "An error occurred";
-      toast.error(message);
-
-      console.error(error);
-      return null;
-    }
-  },
-);
+  return {
+    title: repository.fullName,
+    description:
+      repository.description || `${repository.fullName} repository on GitHub.`,
+  };
+}
 
 export default async function RepositoryPage({
   params,

@@ -1,3 +1,11 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Top GitHub Developers",
+  description:
+    "Explore popular GitHub developers, their repositories, followers, contributions, and open-source work.",
+};
+
 export default function Profiles() {
   return (
     <div className="space-y-8">
