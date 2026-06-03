@@ -28,12 +28,14 @@ export default function UserInfo({ user }: { user: User }) {
         height={500}
         className="size-30 md:size-40 rounded-full"
       />
-      <div className="flex-1 space-y-4">
+      <div className="flex-1 w-full space-y-4">
         <div className="flex flex-wrap justify-between items-center gap-6">
           <div>
             {name ? (
               <>
-                <h2 className="font-semibold text-[32px]">{name}</h2>
+                <h2 className="font-semibold text-2xl md:text-[32px]">
+                  {name}
+                </h2>
                 <p className="font-mono text-[13px] text-muted-foreground">
                   @{username}
                 </p>
